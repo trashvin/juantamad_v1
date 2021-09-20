@@ -1,0 +1,13 @@
+CALL load_configs
+File.ReadText File: $'''%workingDirectory%\\\\bin\\\\data_completedTasks.txt''' Encoding: File.TextFileEncoding.UTF8 Content=> finishedTasks
+SET taskSaved TO 0
+Display.InputDialog Title: $'''JuanTamadFT v%versionConfig%''' Message: $'''Please append your accomplished task on the list.''' DefaultValue: finishedTasks InputType: Display.InputType.Multiline IsTopMost: False UserInput=> finishedTasks ButtonPressed=> ButtonPressed
+IF ButtonPressed = $'''OK''' THEN
+    File.WriteText File: $'''%workingDirectory%\\\\bin\\\\data_completedTasks.txt''' TextToWrite: finishedTasks AppendNewLine: False IfFileExists: File.IfFileExists.Overwrite Encoding: File.FileEncoding.Unicode
+    SET taskSaved TO 1
+END
+IF taskSaved = 1 THEN
+    Display.ShowMessageWithTimeout Title: $'''JuamTamadFT v%versionConfig%''' Message: $'''The task/s has been saved. ''' Icon: Display.Icon.Information Buttons: Display.Buttons.OK DefaultButton: Display.DefaultButton.Button1 IsTopMost: False Timeout: 3 ButtonPressed=> ButtonPressed2
+ELSE
+    Display.ShowMessageWithTimeout Title: $'''JuamTamadFT v%versionConfig%''' Message: $'''The task/s has NOT been saved. ''' Icon: Display.Icon.Warning Buttons: Display.Buttons.OK DefaultButton: Display.DefaultButton.Button1 IsTopMost: False Timeout: 3 ButtonPressed=> ButtonPressed2
+END

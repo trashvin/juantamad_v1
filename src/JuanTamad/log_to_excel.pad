@@ -1,4 +1,4 @@
-Excel.LaunchAndOpen Path: $'''D:\\Projects RSX-Labs\\juantamad_v1\\src\\records.xlsx''' Visible: False ReadOnly: False LoadAddInsAndMacros: False Instance=> ExcelInstance
+Excel.LaunchAndOpen Path: $'''%workingDirectory%\\bin\\records.xlsx''' Visible: False ReadOnly: False LoadAddInsAndMacros: False Instance=> ExcelInstance
 Excel.GetFirstFreeColumnRow Instance: ExcelInstance FirstFreeColumn=> FirstFreeColumn FirstFreeRow=> FirstFreeRow
 Excel.WriteCell Instance: ExcelInstance Value: FormattedDateTime Column: 1 Row: FirstFreeRow
 Excel.WriteCell Instance: ExcelInstance Value: blockers Column: 6 Row: FirstFreeRow
