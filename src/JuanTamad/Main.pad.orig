@@ -1,0 +1,129 @@
+# Load the configuration from file
+CALL load_configs
+File.ReadText File: $'''%workingDirectory%\\bin\\message_email.txt''' Encoding: File.TextFileEncoding.UTF8 Content=> ParamFile
+Text.Replace Text: ParamFile TextToFind: $'''$NAME$''' IsRegEx: False IgnoreCase: False ReplaceWith: nameConfig ActivateEscapeSequences: False Result=> ParamFile
+Text.Replace Text: ParamFile TextToFind: $'''$REASON$''' IsRegEx: False IgnoreCase: False ReplaceWith: reasonConfig ActivateEscapeSequences: False Result=> ParamFile
+Display.SelectFromList Title: $'''JuAnTAMAD v%versionConfig%''' Message: $'''What do you want to do?''' List: $'''Perform Time In
+Perform Time Out''' IsTopMost: True AllowEmpty: False SelectedItem=> SelectedItem SelectedIndex=> SelectedAction ButtonPressed=> ButtonPressed1
+IF ButtonPressed1 = $'''OK''' THEN
+    Outlook.Launch Instance=> OutlookInstance
+    DateTime.Local DateTimeFormat: DateTime.DateTimeFormat.DateAndTime CurrentDateTime=> CurrentDateTime
+    IF SelectedAction = 0 THEN
+        SET doTimeIn TO 1
+        System.RunDOSCommand DOSCommandOrApplication: $'''%workingDirectory%\\bin\\speedtest.exe''' WorkingDirectory: $'''%workingDirectory%\\bin\\''' StandardOutput=> SpeedtestResult StandardError=> CommandErrorOutput ExitCode=> CommandExitCode
+        File.WriteText File: $'''%workingDirectory%\\bin\\data_speedResult.txt''' TextToWrite: SpeedtestResult AppendNewLine: False IfFileExists: File.IfFileExists.Overwrite Encoding: File.FileEncoding.Unicode
+        File.WriteText File: $'''%workingDirectory%\\bin\\data_timeIn.txt''' TextToWrite: CurrentDateTime AppendNewLine: False IfFileExists: File.IfFileExists.Overwrite Encoding: File.FileEncoding.Unicode
+        Text.FromCustomDateTime DateTime: CurrentDateTime CustomFormat: $'''MM-dd-yyyy''' Result=> FormattedDateTime
+        File.WriteText File: $'''%workingDirectory%\\bin\\data_dayIn.txt''' TextToWrite: FormattedDateTime AppendNewLine: False IfFileExists: File.IfFileExists.Overwrite Encoding: File.FileEncoding.Unicode
+        Text.Replace Text: ParamFile TextToFind: $'''$SPEEDTEST$''' IsRegEx: False IgnoreCase: False ReplaceWith: SpeedtestResult ActivateEscapeSequences: False Result=> ParamFile
+        File.ReadText File: $'''%workingDirectory%\\bin\\data_taskToday.txt''' Encoding: File.TextFileEncoding.UTF8 Content=> taskToday
+        Display.InputDialog Title: $'''JuAnTAMAD v%versionConfig%''' Message: $'''What do you plan to do today?''' DefaultValue: taskToday InputType: Display.InputType.Multiline IsTopMost: True UserInput=> tasksToday ButtonPressed=> ButtonPressed
+        File.WriteText File: $'''%workingDirectory%\\bin\\data_completedTasks.txt''' AppendNewLine: False IfFileExists: File.IfFileExists.Overwrite Encoding: File.FileEncoding.Unicode
+        File.WriteText File: $'''%workingDirectory%\\bin\\data_taskToday.txt''' TextToWrite: tasksToday AppendNewLine: False IfFileExists: File.IfFileExists.Overwrite Encoding: File.FileEncoding.Unicode
+        Text.Replace Text: ParamFile TextToFind: $'''$TODO$''' IsRegEx: False IgnoreCase: False ReplaceWith: tasksToday ActivateEscapeSequences: False Result=> ParamFile
+        File.ReadText File: $'''%workingDirectory%\\bin\\data_blockers.txt''' Encoding: File.TextFileEncoding.UTF8 Content=> blockers
+        Display.InputDialog Title: $'''JuAnTAMAD v%versionConfig%''' Message: $'''Any blockers? If yes, what are those?''' DefaultValue: blockers InputType: Display.InputType.Multiline IsTopMost: True UserInput=> blockers ButtonPressed=> ButtonPressed
+        Text.Replace Text: ParamFile TextToFind: $'''$BLOCKERS$''' IsRegEx: False IgnoreCase: False ReplaceWith: Blockers ActivateEscapeSequences: False Result=> ParamFile
+        Text.Replace Text: ParamFile TextToFind: $'''$TIMEIN$''' IsRegEx: False IgnoreCase: False ReplaceWith: $'''%CurrentDateTime% Manila Time''' ActivateEscapeSequences: False Result=> ParamFile
+        Text.Replace Text: ParamFile TextToFind: $'''$TIMEOUT$''' IsRegEx: False IgnoreCase: False ReplaceWith: $'''.''' ActivateEscapeSequences: False Result=> ParamFile
+        Text.Replace Text: ParamFile TextToFind: $'''$COMPLETE$''' IsRegEx: False IgnoreCase: False ReplaceWith: $'''.''' ActivateEscapeSequences: False Result=> ParamFile
+        Text.Replace Text: ParamFile TextToFind: $'''$TODONEXT$''' IsRegEx: False IgnoreCase: False ReplaceWith: $'''.''' ActivateEscapeSequences: False Result=> ParamFile
+        Outlook.SendEmail Instance: OutlookInstance Account: sendByConfig SendTo: sendToConfig Subject: $'''FAI RS Whereabouts : %nameConfig% (%FormattedDateTime%)''' Body: ParamFile IsBodyHtml: True
+        CALL log_to_excel
+    ELSE
+        IF checkOutSpeed = $'''True''' THEN
+            System.RunDOSCommand DOSCommandOrApplication: $'''C:\\Users\\m.trilles\\Downloads\\ookla-speedtest-1.0.0-win64\\speedtest.exe''' WorkingDirectory: $'''C:\\Users\\m.trilles\\Downloads\\ookla-speedtest-1.0.0-win64''' StandardOutput=> SpeedtestResult StandardError=> CommandErrorOutput ExitCode=> CommandExitCode
+        ELSE
+            File.ReadText File: $'''%workingDirectory%\\bin\\data_speedResult.txt''' Encoding: File.TextFileEncoding.UTF8 Content=> SpeedtestResult
+        END
+        # Load the configuration from file
+        CALL load_configs
+        File.ReadText File: $'''%workingDirectory%\\bin\\message_email.txt''' Encoding: File.TextFileEncoding.UTF8 Content=> ParamFile
+        Text.Replace Text: ParamFile TextToFind: $'''$NAME$''' IsRegEx: False IgnoreCase: False ReplaceWith: nameConfig ActivateEscapeSequences: False Result=> ParamFile
+        Text.Replace Text: ParamFile TextToFind: $'''$REASON$''' IsRegEx: False IgnoreCase: False ReplaceWith: reasonConfig ActivateEscapeSequences: False Result=> ParamFile
+        Display.SelectFromList Title: $'''JuAnTAMAD v%versionConfig%''' Message: $'''What do you want to do?''' List: $'''Perform Time In
+Perform Time Out''' IsTopMost: True AllowEmpty: False SelectedItem=> SelectedItem SelectedIndex=> SelectedAction ButtonPressed=> ButtonPressed1
+        IF ButtonPressed1 = $'''OK''' THEN
+            Outlook.Launch Instance=> OutlookInstance
+            DateTime.Local DateTimeFormat: DateTime.DateTimeFormat.DateAndTime CurrentDateTime=> CurrentDateTime
+            IF SelectedAction = 0 THEN
+                SET doTimeIn TO 1
+                System.RunDOSCommand DOSCommandOrApplication: $'''%workingDirectory%\\bin\\speedtest.exe''' WorkingDirectory: $'''%workingDirectory%\\bin\\''' StandardOutput=> SpeedtestResult StandardError=> CommandErrorOutput ExitCode=> CommandExitCode
+                File.WriteText File: $'''%workingDirectory%\\bin\\data_speedResult.txt''' TextToWrite: SpeedtestResult AppendNewLine: False IfFileExists: File.IfFileExists.Overwrite Encoding: File.FileEncoding.Unicode
+                File.WriteText File: $'''%workingDirectory%\\bin\\data_timeIn.txt''' TextToWrite: CurrentDateTime AppendNewLine: False IfFileExists: File.IfFileExists.Overwrite Encoding: File.FileEncoding.Unicode
+                Text.FromCustomDateTime DateTime: CurrentDateTime CustomFormat: $'''MM-dd-yyyy''' Result=> FormattedDateTime
+                File.WriteText File: $'''%workingDirectory%\\bin\\data_dayIn.txt''' TextToWrite: FormattedDateTime AppendNewLine: False IfFileExists: File.IfFileExists.Overwrite Encoding: File.FileEncoding.Unicode
+                Text.Replace Text: ParamFile TextToFind: $'''$SPEEDTEST$''' IsRegEx: False IgnoreCase: False ReplaceWith: SpeedtestResult ActivateEscapeSequences: False Result=> ParamFile
+                File.ReadText File: $'''%workingDirectory%\\bin\\data_taskToday.txt''' Encoding: File.TextFileEncoding.UTF8 Content=> taskToday
+                Display.InputDialog Title: $'''JuAnTAMAD v%versionConfig%''' Message: $'''What do you plan to do today?''' DefaultValue: taskToday InputType: Display.InputType.Multiline IsTopMost: True UserInput=> tasksToday ButtonPressed=> ButtonPressed
+                File.WriteText File: $'''%workingDirectory%\\bin\\data_taskToday.txt''' TextToWrite: tasksToday AppendNewLine: False IfFileExists: File.IfFileExists.Overwrite Encoding: File.FileEncoding.Unicode
+                Text.Replace Text: ParamFile TextToFind: $'''$TODO$''' IsRegEx: False IgnoreCase: False ReplaceWith: tasksToday ActivateEscapeSequences: False Result=> ParamFile
+                File.ReadText File: $'''%workingDirectory%\\bin\\data_blockers.txt''' Encoding: File.TextFileEncoding.UTF8 Content=> blockers
+                Display.InputDialog Title: $'''JuAnTAMAD v%versionConfig%''' Message: $'''Any blockers? If yes, what are those?''' DefaultValue: blockers InputType: Display.InputType.Multiline IsTopMost: True UserInput=> blockers ButtonPressed=> ButtonPressed
+                Text.Replace Text: ParamFile TextToFind: $'''$BLOCKERS$''' IsRegEx: False IgnoreCase: False ReplaceWith: Blockers ActivateEscapeSequences: False Result=> ParamFile
+                Text.Replace Text: ParamFile TextToFind: $'''$TIMEIN$''' IsRegEx: False IgnoreCase: False ReplaceWith: $'''%CurrentDateTime% Manila Time''' ActivateEscapeSequences: False Result=> ParamFile
+                Text.Replace Text: ParamFile TextToFind: $'''$TIMEOUT$''' IsRegEx: False IgnoreCase: False ReplaceWith: $'''.''' ActivateEscapeSequences: False Result=> ParamFile
+                Text.Replace Text: ParamFile TextToFind: $'''$COMPLETE$''' IsRegEx: False IgnoreCase: False ReplaceWith: $'''.''' ActivateEscapeSequences: False Result=> ParamFile
+                Text.Replace Text: ParamFile TextToFind: $'''$TODONEXT$''' IsRegEx: False IgnoreCase: False ReplaceWith: $'''.''' ActivateEscapeSequences: False Result=> ParamFile
+                Outlook.SendEmail Instance: OutlookInstance Account: sendByConfig SendTo: sendToConfig Subject: $'''FAI RS Whereabouts : %nameConfig% (%FormattedDateTime%)''' Body: ParamFile IsBodyHtml: True
+                CALL log_to_excel
+            ELSE
+                IF checkOutSpeed = $'''True''' THEN
+                    System.RunDOSCommand DOSCommandOrApplication: $'''C:\\Users\\m.trilles\\Downloads\\ookla-speedtest-1.0.0-win64\\speedtest.exe''' WorkingDirectory: $'''C:\\Users\\m.trilles\\Downloads\\ookla-speedtest-1.0.0-win64''' StandardOutput=> SpeedtestResult StandardError=> CommandErrorOutput ExitCode=> CommandExitCode
+                ELSE
+                    File.ReadText File: $'''%workingDirectory%\\bin\\data_speedResult.txt''' Encoding: File.TextFileEncoding.UTF8 Content=> SpeedtestResult
+                END
+                SET doTimeIn TO 0
+                File.ReadText File: $'''%workingDirectory%\\bin\\data_timeIn.txt''' Encoding: File.TextFileEncoding.UTF8 Content=> timeIn
+                File.ReadText File: $'''%workingDirectory%\\bin\\data_dayIn.txt''' Encoding: File.TextFileEncoding.UTF8 Content=> dayIn
+                File.ReadText File: $'''%workingDirectory%\\bin\\data_completedTasks.txt''' Encoding: File.TextFileEncoding.UTF8 Content=> completedTasks
+                Text.Replace Text: ParamFile TextToFind: $'''$SPEEDTEST$''' IsRegEx: False IgnoreCase: False ReplaceWith: SpeedtestResult ActivateEscapeSequences: False Result=> ParamFile
+                Text.Replace Text: ParamFile TextToFind: $'''$TODO$''' IsRegEx: False IgnoreCase: False ReplaceWith: taskToday ActivateEscapeSequences: False Result=> ParamFile
+                Display.InputDialog Title: $'''JuAnTAMAD v%versionConfig%''' Message: $'''What did you accomplish today?''' DefaultValue: tasksToday InputType: Display.InputType.Multiline IsTopMost: True UserInput=> completedTasks ButtonPressed=> ButtonPressed
+                Display.InputDialog Title: $'''JuAnTAMAD v%versionConfig%''' Message: $'''What do you plan to do for tomorrow?''' DefaultValue: tasksToday InputType: Display.InputType.Multiline IsTopMost: True UserInput=> plannedTasks ButtonPressed=> ButtonPressed
+                File.WriteText File: $'''%workingDirectory%\\bin\\data_taskToday.txt''' TextToWrite: plannedTasks AppendNewLine: False IfFileExists: File.IfFileExists.Overwrite Encoding: File.FileEncoding.Unicode
+                Display.InputDialog Title: $'''JuAnTAMAD v%versionConfig%''' Message: $'''Any blockers?''' DefaultValue: $'''%blockers%%tasksToday%''' InputType: Display.InputType.Multiline IsTopMost: True UserInput=> blockers ButtonPressed=> ButtonPressed
+                File.WriteText File: $'''%workingDirectory%\\bin\\data_blockers.txt''' TextToWrite: blockers AppendNewLine: False IfFileExists: File.IfFileExists.Overwrite Encoding: File.FileEncoding.Unicode
+                Text.Replace Text: ParamFile TextToFind: $'''$TIMEIN$''' IsRegEx: False IgnoreCase: False ReplaceWith: $'''%timeIn% Manila Time''' ActivateEscapeSequences: False Result=> ParamFile
+                Text.Replace Text: ParamFile TextToFind: $'''$TIMEOUT$''' IsRegEx: False IgnoreCase: False ReplaceWith: $'''%CurrentDateTime% Manila Time''' ActivateEscapeSequences: False Result=> ParamFile
+                Text.Replace Text: ParamFile TextToFind: $'''$COMPLETE$''' IsRegEx: False IgnoreCase: False ReplaceWith: completedTasks ActivateEscapeSequences: False Result=> ParamFile
+                Text.Replace Text: ParamFile TextToFind: $'''$TODONEXT$''' IsRegEx: False IgnoreCase: False ReplaceWith: plannedTasks ActivateEscapeSequences: False Result=> ParamFile
+                Text.Replace Text: ParamFile TextToFind: $'''$BLOCKERS$''' IsRegEx: False IgnoreCase: False ReplaceWith: blockers ActivateEscapeSequences: False Result=> ParamFile
+                Outlook.SendEmail Instance: OutlookInstance Account: sendByConfig SendTo: sendToConfig Subject: $'''FAI RS Whereabouts : %nameConfig% (%dayIn%)''' Body: ParamFile IsBodyHtml: True
+                SET timeOut TO CurrentDateTime
+                CALL log_to_excel
+            END
+        END
+        IF doTimeIn >= 0 THEN
+            SET lastMessage TO $'''Thank you for using JuanTamad v%versionConfig%. Your email have been sent.'''
+        ELSE
+            SET lastMessage TO $'''Thank you for using JuanTamad v%versionConfig%. Your email was NOT sent.'''
+        END
+        Display.ShowMessageWithTimeout Title: $'''JuanTamad v%versionConfig%''' Message: lastMessage Icon: Display.Icon.Information Buttons: Display.Buttons.OK DefaultButton: Display.DefaultButton.Button1 IsTopMost: False Timeout: 3 ButtonPressed=> ButtonPressed2
+        SET doTimeIn TO 0
+        File.ReadText File: $'''%workingDirectory%\\bin\\data_timeIn.txt''' Encoding: File.TextFileEncoding.UTF8 Content=> timeIn
+        File.ReadText File: $'''%workingDirectory%\\bin\\data_dayIn.txt''' Encoding: File.TextFileEncoding.UTF8 Content=> dayIn
+        File.ReadText File: $'''%workingDirectory%\\bin\\data_completedTasks.txt''' Encoding: File.TextFileEncoding.UTF8 Content=> taskToday
+        Text.Replace Text: ParamFile TextToFind: $'''$SPEEDTEST$''' IsRegEx: False IgnoreCase: False ReplaceWith: SpeedtestResult ActivateEscapeSequences: False Result=> ParamFile
+        Text.Replace Text: ParamFile TextToFind: $'''$TODO$''' IsRegEx: False IgnoreCase: False ReplaceWith: taskToday ActivateEscapeSequences: False Result=> ParamFile
+        Display.InputDialog Title: $'''JuAnTAMAD v%versionConfig%''' Message: $'''What did you accomplish today?''' DefaultValue: tasksToday InputType: Display.InputType.Multiline IsTopMost: True UserInput=> completedTasks ButtonPressed=> ButtonPressed
+        Display.InputDialog Title: $'''JuAnTAMAD v%versionConfig%''' Message: $'''What do you plan to do for tomorrow?''' DefaultValue: tasksToday InputType: Display.InputType.Multiline IsTopMost: True UserInput=> plannedTasks ButtonPressed=> ButtonPressed
+        File.WriteText File: $'''%workingDirectory%\\bin\\data_taskToday.txt''' TextToWrite: plannedTasks AppendNewLine: False IfFileExists: File.IfFileExists.Overwrite Encoding: File.FileEncoding.Unicode
+        Display.InputDialog Title: $'''JuAnTAMAD v%versionConfig%''' Message: $'''Any blockers?''' DefaultValue: $'''%blockers%%tasksToday%''' InputType: Display.InputType.Multiline IsTopMost: True UserInput=> blockers ButtonPressed=> ButtonPressed
+        File.WriteText File: $'''%workingDirectory%\\bin\\data_blockers.txt''' TextToWrite: blockers AppendNewLine: False IfFileExists: File.IfFileExists.Overwrite Encoding: File.FileEncoding.Unicode
+        Text.Replace Text: ParamFile TextToFind: $'''$TIMEIN$''' IsRegEx: False IgnoreCase: False ReplaceWith: $'''%timeIn% Manila Time''' ActivateEscapeSequences: False Result=> ParamFile
+        Text.Replace Text: ParamFile TextToFind: $'''$TIMEOUT$''' IsRegEx: False IgnoreCase: False ReplaceWith: $'''%CurrentDateTime% Manila Time''' ActivateEscapeSequences: False Result=> ParamFile
+        Text.Replace Text: ParamFile TextToFind: $'''$COMPLETE$''' IsRegEx: False IgnoreCase: False ReplaceWith: completedTasks ActivateEscapeSequences: False Result=> ParamFile
+        Text.Replace Text: ParamFile TextToFind: $'''$TODONEXT$''' IsRegEx: False IgnoreCase: False ReplaceWith: plannedTasks ActivateEscapeSequences: False Result=> ParamFile
+        Text.Replace Text: ParamFile TextToFind: $'''$BLOCKERS$''' IsRegEx: False IgnoreCase: False ReplaceWith: blockers ActivateEscapeSequences: False Result=> ParamFile
+        Outlook.SendEmail Instance: OutlookInstance Account: sendByConfig SendTo: sendToConfig Subject: $'''FAI RS Whereabouts : %nameConfig% (%dayIn%)''' Body: ParamFile IsBodyHtml: True
+        SET timeOut TO CurrentDateTime
+        CALL log_to_excel
+    END
+END
+IF doTimeIn >= 0 THEN
+    SET lastMessage TO $'''Thank you for using JuanTamad v%versionConfig%. Your email have been sent.'''
+ELSE
+    SET lastMessage TO $'''Thank you for using JuanTamad v%versionConfig%. Your email was NOT sent.'''
+END
+Display.ShowMessageWithTimeout Title: $'''JuanTamad v%versionConfig%''' Message: lastMessage Icon: Display.Icon.Information Buttons: Display.Buttons.OK DefaultButton: Display.DefaultButton.Button1 IsTopMost: False Timeout: 3 ButtonPressed=> ButtonPressed2

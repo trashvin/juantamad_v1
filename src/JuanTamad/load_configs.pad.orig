@@ -1,5 +1,5 @@
 # set the working directory and doTimein status
-SET workingDirectory TO $'''C:\\juantamad_v1'''
+SET workingDirectory TO $'''C:\\juantamad_v1temp'''
 SET doTimeIn TO -1
 # Load the settings.xml to variables
 XML.ReadFromFile File: $'''%workingDirectory%\\bin\\settings.xml''' Encoding: XML.FileEncoding.DefaultEncoding XmlDocument=> xmlConfig
@@ -9,5 +9,4 @@ XML.GetElementAttribute Document: xmlConfig XPathQuery: $'''//version''' Attribu
 XML.GetElementAttribute Document: xmlConfig XPathQuery: $'''//sendTo''' AttributeName: $'''value''' TextValue=> sendToConfig
 XML.GetElementAttribute Document: xmlConfig XPathQuery: $'''//outSpeed''' AttributeName: $'''value''' TextValue=> checkOutSpeed
 XML.GetElementAttribute Document: xmlConfig XPathQuery: $'''//sendBy''' AttributeName: $'''value''' TextValue=> sendByConfig
-XML.GetElementAttribute Document: xmlConfig XPathQuery: $'''//header''' AttributeName: $'''value''' TextValue=> emailHeader
 EXIT FUNCTION
