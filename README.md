@@ -42,7 +42,7 @@ JuanTamadFT is a side-kick app for JuanTamad, it allows you to enter completed t
 
 Open the bin\settings.xml and modify the settings based on your need.
 
-'''
+```
 <settings>
  <name value="Trashvin Tester" />
  <reason value="Telework" />
@@ -51,7 +51,7 @@ Open the bin\settings.xml and modify the settings based on your need.
  <sendBy value="by@test.com" />
  <outSpeed value="False" />
 </settings>
-'''
+```
 
 Settings :
 - name : the main header of the email body
