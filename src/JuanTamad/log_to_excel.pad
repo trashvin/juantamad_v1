@@ -4,7 +4,7 @@ Excel.WriteCell Instance: ExcelInstance Value: dayIn Column: 1 Row: FirstFreeRow
 Excel.WriteCell Instance: ExcelInstance Value: blockers Column: 6 Row: FirstFreeRow
 IF doTimeIn = 1 THEN
     Excel.WriteCell Instance: ExcelInstance Value: taskToday Column: 5 Row: FirstFreeRow
-    Excel.WriteCell Instance: ExcelInstance Value: CurrentDateTime Column: 2 Row: FirstFreeRow
+    Excel.WriteCell Instance: ExcelInstance Value: FormattedDateTime Column: 2 Row: FirstFreeRow
 ELSE
     Excel.WriteCell Instance: ExcelInstance Value: plannedTasks Column: 5 Row: FirstFreeRow
     Excel.WriteCell Instance: ExcelInstance Value: timeOut Column: 3 Row: FirstFreeRow
