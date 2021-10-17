@@ -8,7 +8,7 @@ Just Another TimeIn/Out Automated Management Application Duh! or JuanTamad is a 
 
 ## Who is JuanTamad ?
 
-JuanTamad is a fictitious person known to Filipinos representing the lazy portion of the population. In an old story, he used to lay with mouth wide open under a mango tree waiting for the fruit to fall due to gravity. This app, however, does not glorify lazyness :) It aims to make the boring task of emailing our whereabouts before and after our daily shift simpler and easier using Power Automate Desktop. 
+JuanTamad is a fictitious person known to Filipinos representing the lazy portion of the population. In an old story, he used to lay with mouth wide open under a mango tree waiting for the fruit to fall due to gravity. This app, however, does not glorify laziness :) It aims to make the boring task of emailing our whereabouts before and after our daily shift simpler and easier using Power Automate Desktop. 
 
 ## Requirement
 
