@@ -1,4 +1,4 @@
-# JuanTamad 
+# Project JuanTamad v1
 
 Just Another TimeIn/Out Automated Management Application Duh! or JuanTamad is a daily email time recording system app using Power Automate Desktop. Ok, this is not a standalone app, you need Microsoft Power Automate Desktop to use it. And, unlike a regular app, you cant just download and install, you need to recreate the flow... manually, inside PAD.
 
