@@ -18,6 +18,10 @@ JuanTamad is a fictitious person known to Filipinos representing the lazy portio
 
 ## 'Installation' Steps
 
+<p align="center">
+  <img src="https://i.imgur.com/897gqyt.png" />
+</p>
+
 ### JuanTamad main app
 
 - Download the repo to your local machine.
