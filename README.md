@@ -70,5 +70,11 @@ Using JuanTamad is straight forward, you just need to run the flow in the mornin
 
 During your shift, if you have finished or currently doing a task that you want to record, just run the JuanTamadFT flow. Any data recorded by JuanTamadFT will appear when you do your time-out.
 
+Sample email from JuanTamad
+
+<p align="center">
+  <img src="https://i.imgur.com/FIO62XA.png" />
+</p>
+
 ## NOTE 
 This was created for fun while learning  Power Automate Desktop, enjoy!
