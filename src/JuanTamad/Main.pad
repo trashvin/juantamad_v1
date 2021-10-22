@@ -12,12 +12,9 @@ IF ButtonPressed1 = $'''OK''' THEN
     DateTime.Local DateTimeFormat: DateTime.DateTimeFormat.DateAndTime CurrentDateTime=> CurrentDateTime
     IF SelectedAction = 0 THEN
         SET doTimeIn TO 1
-        System.RunDOSCommand DOSCommandOrApplication: $'''%workingDirectory%\\bin\\speedtest.exe''' WorkingDirectory: $'''%workingDirectory%\\bin\\''' StandardOutput=> SpeedtestResult StandardError=> CommandErrorOutput ExitCode=> CommandExitCode
-        File.WriteText File: $'''%workingDirectory%\\bin\\data_speedResult.txt''' TextToWrite: SpeedtestResult AppendNewLine: False IfFileExists: File.IfFileExists.Overwrite Encoding: File.FileEncoding.Unicode
         File.WriteText File: $'''%workingDirectory%\\bin\\data_timeIn.txt''' TextToWrite: CurrentDateTime AppendNewLine: False IfFileExists: File.IfFileExists.Overwrite Encoding: File.FileEncoding.Unicode
         Text.FromCustomDateTime DateTime: CurrentDateTime CustomFormat: $'''MM-dd-yyyy''' Result=> FormattedDateTime
         File.WriteText File: $'''%workingDirectory%\\bin\\data_dayIn.txt''' TextToWrite: FormattedDateTime AppendNewLine: False IfFileExists: File.IfFileExists.Overwrite Encoding: File.FileEncoding.Unicode
-        Text.Replace Text: ParamFile TextToFind: $'''$SPEEDTEST$''' IsRegEx: False IgnoreCase: False ReplaceWith: SpeedtestResult ActivateEscapeSequences: False Result=> ParamFile
         File.ReadText File: $'''%workingDirectory%\\bin\\data_taskToday.txt''' Encoding: File.TextFileEncoding.UTF8 Content=> taskToday
         Display.InputDialog Title: $'''JuAnTAMAD v%versionConfig%''' Message: $'''What do you plan to do today?''' DefaultValue: taskToday InputType: Display.InputType.Multiline IsTopMost: True UserInput=> tasksToday ButtonPressed=> ButtonPressed
         File.WriteText File: $'''%workingDirectory%\\bin\\data_completedTasks.txt''' AppendNewLine: False IfFileExists: File.IfFileExists.Overwrite Encoding: File.FileEncoding.Unicode
@@ -30,6 +27,10 @@ IF ButtonPressed1 = $'''OK''' THEN
         Text.Replace Text: ParamFile TextToFind: $'''$TIMEOUT$''' IsRegEx: False IgnoreCase: False ReplaceWith: $'''.''' ActivateEscapeSequences: False Result=> ParamFile
         Text.Replace Text: ParamFile TextToFind: $'''$COMPLETE$''' IsRegEx: False IgnoreCase: False ReplaceWith: $'''.''' ActivateEscapeSequences: False Result=> ParamFile
         Text.Replace Text: ParamFile TextToFind: $'''$TODONEXT$''' IsRegEx: False IgnoreCase: False ReplaceWith: $'''.''' ActivateEscapeSequences: False Result=> ParamFile
+        Display.ShowMessageWithTimeout Title: $'''JuanTamad v%versionConfig%''' Message: $'''Please wait while the system checks your internet speed. You can do other tasks while waiting for the next step.''' Icon: Display.Icon.Information Buttons: Display.Buttons.OK DefaultButton: Display.DefaultButton.Button1 IsTopMost: False Timeout: 3 ButtonPressed=> ButtonPressed3
+        System.RunDOSCommand DOSCommandOrApplication: $'''%workingDirectory%\\bin\\speedtest.exe''' WorkingDirectory: $'''%workingDirectory%\\bin\\''' StandardOutput=> SpeedtestResult StandardError=> CommandErrorOutput ExitCode=> CommandExitCode
+        File.WriteText File: $'''%workingDirectory%\\bin\\data_speedResult.txt''' TextToWrite: SpeedtestResult AppendNewLine: False IfFileExists: File.IfFileExists.Overwrite Encoding: File.FileEncoding.Unicode
+        Text.Replace Text: ParamFile TextToFind: $'''$SPEEDTEST$''' IsRegEx: False IgnoreCase: False ReplaceWith: SpeedtestResult ActivateEscapeSequences: False Result=> ParamFile
         Outlook.SendEmail Instance: OutlookInstance Account: sendByConfig SendTo: sendToConfig Subject: $'''FAI RS Whereabouts : %nameConfig% (%FormattedDateTime%)''' Body: ParamFile IsBodyHtml: True
         CALL log_to_excel
     ELSE
@@ -40,7 +41,6 @@ IF ButtonPressed1 = $'''OK''' THEN
         END
         SET doTimeIn TO 0
         File.ReadText File: $'''%workingDirectory%\\bin\\data_timeIn.txt''' Encoding: File.TextFileEncoding.UTF8 Content=> timeIn
-        File.ReadText File: $'''%workingDirectory%\\bin\\data_dayIn.txt''' Encoding: File.TextFileEncoding.UTF8 Content=> dayIn
         File.ReadText File: $'''%workingDirectory%\\bin\\data_completedTasks.txt''' Encoding: File.TextFileEncoding.UTF8 Content=> completedTasks
         File.ReadText File: $'''%workingDirectory%\\bin\\data_taskToday.txt''' Encoding: File.TextFileEncoding.UTF8 Content=> taskToday
         Text.Replace Text: ParamFile TextToFind: $'''$SPEEDTEST$''' IsRegEx: False IgnoreCase: False ReplaceWith: SpeedtestResult ActivateEscapeSequences: False Result=> ParamFile
