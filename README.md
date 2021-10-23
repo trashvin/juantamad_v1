@@ -14,7 +14,9 @@ JuanTamad is a fictitious person known to Filipinos representing the lazy portio
 
 - Power Automate Desktop
 - Microsft Outlook 
-- Email Account
+- Email Account 
+
+Note : This was designed to be used with Office365 account but the email function can be modified to use free emails such as Gmail.
 
 ## 'Installation' Steps
 
