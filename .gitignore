@@ -1,1 +1,3 @@
 *.orig
+_package/
+_package/*
