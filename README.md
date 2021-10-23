@@ -78,3 +78,11 @@ Sample email from JuanTamad
 
 ## NOTE 
 This was created for fun while learning  Power Automate Desktop, enjoy!
+
+A packer tool has been provided for easy redistribution
+
+## Releases
+
+| Date       | Release   | Link |
+|------------|-----------|------|
+| 10/23/2021 | release 1 | [link](https://github.com/trashvin/project-juantamad-v1/releases/tag/release_1)  |
