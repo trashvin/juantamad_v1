@@ -24,7 +24,7 @@ Note : This was designed to be used with Office365 account but the email functio
   <img src="https://i.imgur.com/897gqyt.png" />
 </p>
 
-### JuanTamad main app
+### JuanTamad (main app)
 
 - Download the repo to your local machine.
 - Create a new flow in your Power Automate Desktop application. You can name it JuanTamad or any name.
@@ -34,7 +34,7 @@ Note : This was designed to be used with Office365 account but the email functio
 - Create a subflow named 'log_to_excel'.
 - Copy the contents of src\JuanTamad\log_to_excel.pad to the log_to_excel subflow.
 
-### JuanTamad side kick app 
+### JuanTamadFT (side kick app) 
 
 JuanTamadFT is a side-kick app for JuanTamad, it allows you to enter completed task within a day.
 
@@ -44,7 +44,7 @@ JuanTamadFT is a side-kick app for JuanTamad, it allows you to enter completed t
 - Create a subflow named 'load_configs'.
 - Copy the contents of src\JuanTamadFT\load_configs.pad to the load_configs subflow.
 
-### Configure the app
+### Configuring the App
 
 Open the bin\settings.xml and modify the settings based on your need.
 
