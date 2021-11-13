@@ -1,8 +1,11 @@
 <settings>
- <name value="Trashvin Tester" />
+ <name value="Marvin" />
  <reason value="Telework" />
- <version value="1.1" />
- <sendTo value="to@test.com" />
- <sendBy value="by@test.com" />
+ <version value="1.2" />
+ <useOutlook value="True" />
+ <sendTo value="m.trilles@fujitsu.com" />
+ <sendBy value="m.trilles@fujitsu.com" />
  <outSpeed value="False" />
+ <header value="Demo Whereabouts" />
+ <appName value="Project JuanTamad" />
 </settings>

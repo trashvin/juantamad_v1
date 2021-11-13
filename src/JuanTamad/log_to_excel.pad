@@ -1,13 +1,21 @@
-Excel.LaunchAndOpen Path: $'''%workingDirectory%\\bin\\records.xlsx''' Visible: False ReadOnly: False LoadAddInsAndMacros: False Instance=> ExcelInstance
+Excel.LaunchAndOpen Path: $'''%workingDirectory%\\bin\\records_v2.xlsx''' Visible: False ReadOnly: False LoadAddInsAndMacros: False Instance=> ExcelInstance
+File.ReadText File: $'''%workingDirectory%\\bin\\data_dayIn.txt''' Encoding: File.TextFileEncoding.UTF8 Content=> dayIn
 Excel.GetFirstFreeColumnRow Instance: ExcelInstance FirstFreeColumn=> FirstFreeColumn FirstFreeRow=> FirstFreeRow
+Excel.ReadCell Instance: ExcelInstance StartColumn: 1 StartRow: FirstFreeRow - 1 ReadAsText: False CellValue=> dateRecorded
+Text.ToDateTime Text: dateRecorded DateTime=> recordDate
+Text.ToDateTime Text: dayIn DateTime=> newDateInfo
+IF recordDate = newDateInfo THEN
+    SET FirstFreeRow TO FirstFreeRow - 1
+END
 Excel.WriteCell Instance: ExcelInstance Value: dayIn Column: 1 Row: FirstFreeRow
-Excel.WriteCell Instance: ExcelInstance Value: blockers Column: 6 Row: FirstFreeRow
+Excel.WriteCell Instance: ExcelInstance Value: blockers Column: 7 Row: FirstFreeRow
 IF doTimeIn = 1 THEN
-    Excel.WriteCell Instance: ExcelInstance Value: taskToday Column: 5 Row: FirstFreeRow
-    Excel.WriteCell Instance: ExcelInstance Value: FormattedDateTime Column: 2 Row: FirstFreeRow
+    Excel.WriteCell Instance: ExcelInstance Value: tasksToday Column: 4 Row: FirstFreeRow
+    Excel.WriteCell Instance: ExcelInstance Value: CurrentDateTime Column: 2 Row: FirstFreeRow
 ELSE
-    Excel.WriteCell Instance: ExcelInstance Value: plannedTasks Column: 5 Row: FirstFreeRow
+    DISABLE Excel.WriteCell Instance: ExcelInstance Value: tasksToday Column: 4 Row: FirstFreeRow
+    Excel.WriteCell Instance: ExcelInstance Value: plannedTasks Column: 6 Row: FirstFreeRow
     Excel.WriteCell Instance: ExcelInstance Value: timeOut Column: 3 Row: FirstFreeRow
-    Excel.WriteCell Instance: ExcelInstance Value: completedTasks Column: 4 Row: FirstFreeRow
+    Excel.WriteCell Instance: ExcelInstance Value: completedTasks Column: 5 Row: FirstFreeRow
 END
 Excel.CloseAndSave Instance: ExcelInstance
