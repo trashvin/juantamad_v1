@@ -1,22 +1,13 @@
 # set the working directory and doTimein status
-SET workingDirectory TO $'''C:\\project-juantamad'''
+SET workingDirectory TO $'''C:\\juantamad_v1'''
 SET doTimeIn TO -1
 # Load the settings.xml to variables
 XML.ReadFromFile File: $'''%workingDirectory%\\bin\\settings.xml''' Encoding: XML.FileEncoding.DefaultEncoding XmlDocument=> xmlConfig
-XML.GetElementAttribute Document: xmlConfig XPathQuery: $'''//name''' AttributeName: $'''value''' TextValue=> nameConfig
-XML.GetElementAttribute Document: xmlConfig XPathQuery: $'''//reason''' AttributeName: $'''value''' TextValue=> reasonConfig
-XML.GetElementAttribute Document: xmlConfig XPathQuery: $'''//version''' AttributeName: $'''value''' TextValue=> versionConfig
-# if true, it will use the outlook flow. else, it will use regular smtp if supported
-XML.GetElementAttribute Document: xmlConfig XPathQuery: $'''//useOutlook''' AttributeName: $'''value''' TextValue=> useOutlookConfig
-XML.GetElementAttribute Document: xmlConfig XPathQuery: $'''//sendTo''' AttributeName: $'''value''' TextValue=> sendToConfig
-XML.GetElementAttribute Document: xmlConfig XPathQuery: $'''//outSpeed''' AttributeName: $'''value''' TextValue=> checkOutSpeed
-XML.GetElementAttribute Document: xmlConfig XPathQuery: $'''//sendBy''' AttributeName: $'''value''' TextValue=> sendByConfig
-XML.GetElementAttribute Document: xmlConfig XPathQuery: $'''//appName''' AttributeName: $'''value''' TextValue=> appNameConfig
-XML.GetElementAttribute Document: xmlConfig XPathQuery: $'''//header''' AttributeName: $'''value''' TextValue=> emailHeader
-# build the paramFile for the email content
-File.ReadText File: $'''%workingDirectory%\\bin\\message_email.txt''' Encoding: File.TextFileEncoding.UTF8 Content=> ParamFile
-Text.Replace Text: ParamFile TextToFind: $'''$HEADER$''' IsRegEx: False IgnoreCase: False ReplaceWith: emailHeader ActivateEscapeSequences: False Result=> ParamFile
-Text.Replace Text: ParamFile TextToFind: $'''$VERSION$''' IsRegEx: False IgnoreCase: False ReplaceWith: versionConfig ActivateEscapeSequences: False Result=> ParamFile
-Text.Replace Text: ParamFile TextToFind: $'''$NAME$''' IsRegEx: False IgnoreCase: False ReplaceWith: nameConfig ActivateEscapeSequences: False Result=> ParamFile
-Text.Replace Text: ParamFile TextToFind: $'''$REASON$''' IsRegEx: False IgnoreCase: False ReplaceWith: reasonConfig ActivateEscapeSequences: False Result=> ParamFile
+XML.GetXmlElementAttribute.GetElementAttribute Document: xmlConfig XPathQuery: $'''//name''' AttributeName: $'''value''' TextValue=> nameConfig
+XML.GetXmlElementAttribute.GetElementAttribute Document: xmlConfig XPathQuery: $'''//reason''' AttributeName: $'''value''' TextValue=> reasonConfig
+XML.GetXmlElementAttribute.GetElementAttribute Document: xmlConfig XPathQuery: $'''//version''' AttributeName: $'''value''' TextValue=> versionConfig
+XML.GetXmlElementAttribute.GetElementAttribute Document: xmlConfig XPathQuery: $'''//sendTo''' AttributeName: $'''value''' TextValue=> sendToConfig
+XML.GetXmlElementAttribute.GetElementAttribute Document: xmlConfig XPathQuery: $'''//outSpeed''' AttributeName: $'''value''' TextValue=> checkOutSpeed
+XML.GetXmlElementAttribute.GetElementAttribute Document: xmlConfig XPathQuery: $'''//sendBy''' AttributeName: $'''value''' TextValue=> sendByConfig
+XML.GetXmlElementAttribute.GetElementAttribute Document: xmlConfig XPathQuery: $'''//header''' AttributeName: $'''value''' TextValue=> emailHeader
 EXIT FUNCTION
